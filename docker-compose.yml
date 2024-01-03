@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      # Only will build development stage from our dockerfile
+      target: development
+    volumes:
+      - .:/usr/src/app
+    env_file:
+      - .env
+    command: npm run start:dev
+
+    ports:
+      - 4000:4000
+    depends_on:
+      - postgres
+    networks:
+      - backnet
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:4000/ || exit 1']
+      interval: 1m
+      timeout: 10s
+      retries: 3
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_USER=theo
+      - POSTGRES_PASSWORD=bank
+      - POSTGRES_DB=bank-nest
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresbankdata:/var/lib/postgresql/data
+    networks:
+      - backnet
+
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - 6379:6379
+    networks:
+      - backnet
+
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    command: redis-server --appendonly yes
+    volumes:
+      - redis.conf:/etc/redis/redis.conf
+
+volumes:
+  redis.conf:
+  postgresbankdata:
+networks:
+  backnet:

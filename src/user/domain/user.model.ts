@@ -1,3 +1,4 @@
+import { AccountProperties } from '@/account/domain/account.model';
 import { BaseModel } from '@/common/domain/base.model';
 import { AggregateRoot } from '@nestjs/cqrs';
 
@@ -20,6 +21,7 @@ export type UserEssentialProperties = Required<{
 export type UserOptionalProperties = Partial<{
   password: string;
   phone: string;
+  accounts: AccountProperties[];
 }>;
 
 export type UserProperties = BaseModel &
@@ -33,6 +35,9 @@ export class UserImplement extends AggregateRoot implements User {
   private readonly role: UserRole;
   private readonly password: string;
   private readonly phone: string;
+  private readonly createdAt?: Date;
+  private readonly updatedAt?: Date;
+  private readonly deletedAt?: Date;
 
   constructor(properties: UserProperties) {
     super();
@@ -46,6 +51,9 @@ export class UserImplement extends AggregateRoot implements User {
       password: this.password,
       role: this.role,
       phone: this.phone,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      deletedAt: this.deletedAt,
     };
   }
 }

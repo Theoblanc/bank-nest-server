@@ -1,6 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { UserProperties, UserRole } from '../domain/user.model';
 import { BaseEntity } from '@/common/infrastructure/base.entity';
+import AccountEntity from '@/account/infrastructure/account.entity';
 
 @Entity({ name: 'users' })
 export default class UserEntity extends BaseEntity implements UserProperties {
@@ -22,4 +23,7 @@ export default class UserEntity extends BaseEntity implements UserProperties {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @OneToMany(() => AccountEntity, (account) => account.user)
+  accounts: AccountEntity[];
 }

@@ -6,6 +6,12 @@ import { join } from 'path';
 export class GraphQLService implements GqlOptionsFactory {
   constructor() {}
   createGqlOptions() {
-    return { autoSchemaFile: { path: join(process.cwd(), 'schema.gql') } };
+    return {
+      autoSchemaFile: {
+        path: join(process.cwd(), 'schema.gql'),
+        subscription: true,
+        graphiql: true,
+      },
+    };
   }
 }

@@ -5,8 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeORMFactory } from './common/infrastructure/settings/typeorm.factory';
 import { UserModule } from './user/user.module';
+import { AccountModule } from './account/account.module';
 
-const modules = [UserModule];
+const modules = [UserModule, AccountModule];
 
 @Module({
   imports: [

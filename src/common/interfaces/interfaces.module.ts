@@ -4,4 +4,4 @@ import { GqlModule } from '@common/interfaces/graphql/gql.module';
 @Module({
   imports: [GqlModule],
 })
-export class InterfacesModule {}
+export class CommonInterfacesModule {}

@@ -4,7 +4,9 @@ import { AggregateRoot } from '@nestjs/cqrs';
 
 export interface Account {
   properties: () => AccountProperties;
-  update: (account: Partial<AccountProperties>) => void;
+  getBalance: () => number;
+  deposit: (amount: number) => void;
+  withdraw: (amount: number) => void;
 }
 
 export type AccountEssentialProperties = Required<{
@@ -26,7 +28,7 @@ export class AccountImplement extends AggregateRoot implements Account {
   private readonly id: string;
   private readonly accountNumber: string;
   private readonly ownerName: string;
-  private readonly balance: number;
+  private balance: number;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
   private readonly deletedAt?: Date;
@@ -35,6 +37,10 @@ export class AccountImplement extends AggregateRoot implements Account {
   constructor(properties: AccountProperties) {
     super();
     Object.assign(this, properties);
+  }
+
+  get accountId() {
+    return this.id;
   }
 
   properties(): AccountProperties {
@@ -50,7 +56,24 @@ export class AccountImplement extends AggregateRoot implements Account {
     };
   }
 
-  update(account: Partial<AccountProperties>): void {
-    Object.assign(this, account);
+  getBalance(): number {
+    return this.balance;
+  }
+
+  deposit(amount: number): void {
+    if (amount <= 0) {
+      throw new Error('Deposit amount must be greater than zero.');
+    }
+    this.balance += amount;
+  }
+
+  withdraw(amount: number): void {
+    if (amount <= 0) {
+      throw new Error('Withdrawal amount must be greater than zero.');
+    }
+    if (this.balance < amount) {
+      throw new Error('Insufficient funds.');
+    }
+    this.balance -= amount;
   }
 }

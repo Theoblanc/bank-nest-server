@@ -1,8 +1,10 @@
-<p align="center">
+# BANK-NEST-SERVER
 
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This project is a portfolio showcasing the implementation of Event-Driven Architecture (EDA) and Command Query Responsibility Segregation (CQRS) patterns within a Nest.js backend system. The goal of this portfolio is to demonstrate the scalability, flexibility, and efficiency of using EDA and CQRS in modern web applications.
+
+## Overview
+
+The portfolio project is structured around a core backend system built with Nest.js, a progressive Node.js framework for building efficient, reliable, and scalable server-side applications. By leveraging the EDA and CQRS patterns, the project aims to separate the read and write operations, ensuring high performance and maintainability, while also efficiently handling real-time data updates through events.
 
 ## Description
 

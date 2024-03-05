@@ -1,0 +1,43 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type UserDTO {
+  id: ID!
+  email: String!
+  name: String!
+  phone: String!
+  role: RoleEnum!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime!
+}
+
+enum RoleEnum {
+  USER
+  ADMIN
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Query {
+  findUser(email: String!): UserDTO!
+}
+
+type Mutation {
+  regiseteUser(input: RegisterUserArgsDTO!): String
+}
+
+input RegisterUserArgsDTO {
+  """user email"""
+  email: String!
+
+  """user name"""
+  name: String!
+
+  """user type ex: Business"""
+  role: RoleEnum!
+}

@@ -6,8 +6,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { typeORMFactory } from './common/infrastructure/settings/typeorm.factory';
 import { UserModule } from './user/user.module';
 import { AccountModule } from './account/account.module';
+import { CommonModule } from './common/common.module';
 
-const modules = [UserModule, AccountModule];
+const modules = [UserModule, AccountModule, CommonModule];
 
 @Module({
   imports: [
@@ -19,7 +20,6 @@ const modules = [UserModule, AccountModule];
       isGlobal: true,
       envFilePath: `.env`,
     }),
-
     ...modules,
   ],
   controllers: [AppController],

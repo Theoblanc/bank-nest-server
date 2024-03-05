@@ -9,9 +9,9 @@ export class GraphQLService implements GqlOptionsFactory {
     return {
       autoSchemaFile: {
         path: join(process.cwd(), 'schema.gql'),
-        subscription: true,
-        graphiql: true,
       },
+      subscription: true,
+      graphiql: true,
     };
   }
 }

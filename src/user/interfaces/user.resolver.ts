@@ -15,7 +15,7 @@ export class UserResolver {
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
     @InjectRepository(UserEntity)
-    private readonly repository: IUserRepository,
+    private readonly repository: IUserRepository
   ) {}
 
   @Query(() => UserDTO)
@@ -24,12 +24,12 @@ export class UserResolver {
   }
 
   @Mutation(() => String, { nullable: true })
-  async regiseteUser(@Args('input') args: RegisterUserArgsDTO) {
+  async registerUser(@Args('input') args: RegisterUserArgsDTO) {
     const { email, name, role = UserRole.USER } = args;
     const command = new RegisterUserCommand({
       email,
       name,
-      role,
+      role
     });
 
     await this.commandBus.execute(command);

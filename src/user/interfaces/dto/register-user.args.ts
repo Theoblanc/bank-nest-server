@@ -1,10 +1,11 @@
 import { UserRole } from '@/user/domain/user.model';
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
-import { IsEmail, IsEnum, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsNull } from 'typeorm';
 
 registerEnumType(UserRole, {
-  name: 'RoleEnum',
+  name: 'RoleEnum'
 });
 
 @InputType()
@@ -20,5 +21,6 @@ export class RegisterUserArgsDTO {
 
   @Field(() => UserRole, { description: 'user type ex: Business' })
   @IsEnum(UserRole)
-  role: UserRole;
+  @IsOptional()
+  role?: UserRole;
 }

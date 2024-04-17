@@ -28,7 +28,7 @@ type Query {
 }
 
 type Mutation {
-  regiseteUser(input: RegisterUserArgsDTO!): String
+  registerUser(input: RegisterUserArgsDTO!): String
 }
 
 input RegisterUserArgsDTO {

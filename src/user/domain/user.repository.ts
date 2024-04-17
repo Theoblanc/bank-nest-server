@@ -1,6 +1,6 @@
-import { User } from './user.model';
+import { User, UserProperties } from './user.model';
 
 export interface IUserRepository {
-  createUser();
+  save(user: UserProperties): void;
   findByEmail(email: string): Promise<User | null>;
 }

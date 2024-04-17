@@ -3,10 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { typeORMFactory } from './common/infrastructure/settings/typeorm.factory';
+import { typeORMFactory } from '@common/infrastructure/settings/typeorm.factory';
 import { UserModule } from './user/user.module';
 import { AccountModule } from './account/account.module';
-import { CommonModule } from './common/common.module';
+import { CommonModule } from '@common/common.module';
 
 const modules = [UserModule, AccountModule, CommonModule];
 

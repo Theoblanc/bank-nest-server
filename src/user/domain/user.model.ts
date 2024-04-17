@@ -4,7 +4,7 @@ import { AggregateRoot } from '@nestjs/cqrs';
 
 export enum UserRole {
   USER = 'USER',
-  ADMIN = 'ADMIN',
+  ADMIN = 'ADMIN'
 }
 
 export interface User {
@@ -33,8 +33,8 @@ export class UserImplement extends AggregateRoot implements User {
   private readonly email: string;
   private readonly name: string;
   private readonly role: UserRole;
-  private readonly password: string;
-  private readonly phone: string;
+  private readonly password?: string;
+  private readonly phone?: string;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
   private readonly deletedAt?: Date;
@@ -53,7 +53,7 @@ export class UserImplement extends AggregateRoot implements User {
       phone: this.phone,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      deletedAt: this.deletedAt,
+      deletedAt: this.deletedAt
     };
   }
 }

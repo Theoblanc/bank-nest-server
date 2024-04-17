@@ -1,6 +1,6 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-export async function setupDoc(app) {
+export async function setupDoc(app): Promise<void> {
   const config = new DocumentBuilder()
     .setTitle(`Bank API Server`)
     .setDescription('All resources using REST interface')

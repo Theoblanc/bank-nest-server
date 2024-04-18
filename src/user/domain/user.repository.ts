@@ -1,6 +1,7 @@
-import { User, UserProperties } from './user.model';
+import { IBaseRepository } from '@/common/domain/base.repository';
+import { User } from './user.model';
+import UserEntity from '@/user/infrastructure/user.entity';
 
-export interface IUserRepository {
-  save(user: UserProperties): void;
+export interface IUserRepository extends IBaseRepository<UserEntity, User> {
   findByEmail(email: string): Promise<User | null>;
 }

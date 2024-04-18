@@ -17,7 +17,7 @@ export type AccountEssentialProperties = Required<{
 }>;
 
 export type AccountOptionalProperties = Partial<{
-  user: UserProperties;
+  user?: UserProperties;
 }>;
 
 export type AccountProperties = BaseModel &
@@ -52,7 +52,7 @@ export class AccountImplement extends AggregateRoot implements Account {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       deletedAt: this.deletedAt,
-      user: this.user,
+      user: this.user
     };
   }
 

@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { IUserRepository } from '../domain/user.repository';

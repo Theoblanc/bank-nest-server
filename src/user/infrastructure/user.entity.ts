@@ -20,10 +20,10 @@ export default class UserEntity extends BaseEntity implements UserProperties {
   @Column({
     type: 'enum',
     enum: UserRole,
-    default: UserRole.USER,
+    default: UserRole.USER
   })
   role: UserRole;
 
-  @OneToMany(() => AccountEntity, (account) => account.user)
-  accounts: AccountEntity[];
+  @OneToMany(() => AccountEntity, (account) => account.user, { nullable: true })
+  accounts?: AccountEntity[];
 }

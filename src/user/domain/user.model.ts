@@ -1,6 +1,7 @@
 import { AccountProperties } from '@/account/domain/account.model';
 import { BaseModel } from '@/common/domain/base.model';
 import { AggregateRoot } from '@nestjs/cqrs';
+import { UserRegisteredEvent } from '@/user/domain/user-register.event';
 
 export enum UserRole {
   USER = 'USER',
@@ -8,6 +9,7 @@ export enum UserRole {
 }
 
 export interface User {
+  register: () => void;
   properties: () => UserProperties;
 }
 
@@ -19,9 +21,12 @@ export type UserEssentialProperties = Required<{
 }>;
 
 export type UserOptionalProperties = Partial<{
-  password: string;
-  phone: string;
-  accounts: AccountProperties[];
+  password?: string;
+  phone?: string;
+  accounts?: AccountProperties[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date;
 }>;
 
 export type UserProperties = BaseModel &
@@ -38,11 +43,17 @@ export class UserImplement extends AggregateRoot implements User {
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
   private readonly deletedAt?: Date;
+  private readonly accounts: AccountProperties[];
 
   constructor(properties: UserProperties) {
     super();
     Object.assign(this, properties);
   }
+
+  register(): void {
+    this.apply(new UserRegisteredEvent(this.properties()));
+  }
+
   properties(): UserProperties {
     return {
       id: this.id,
@@ -51,6 +62,7 @@ export class UserImplement extends AggregateRoot implements User {
       password: this.password,
       role: this.role,
       phone: this.phone,
+      accounts: this.accounts,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       deletedAt: this.deletedAt

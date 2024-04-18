@@ -1,27 +1,30 @@
 import { IUserRepository } from '@/user/domain/user.repository';
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import UserEntity from '@/user/infrastructure/user.entity';
 import { Repository } from 'typeorm';
 import { UserFactory } from '@/user/domain/user.factory';
-import { User, UserProperties } from '@/user/domain/user.model';
+import { User } from '@/user/domain/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
+import { BaseTypeORM } from '@common/infrastructure/base.typeORM';
 
 @Injectable()
-export class UserTypeORM implements IUserRepository {
+export class UserTypeORM
+  extends BaseTypeORM<UserEntity, User>
+  implements IUserRepository
+{
   constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    private readonly userFactory: UserFactory
-  ) {}
-
-  async save(user: UserProperties) {
-    const savedUser = await this.userRepository.save(user);
-    this.userFactory.create(savedUser);
+    readonly factory: UserFactory,
+    @InjectRepository(UserEntity) readonly repo: Repository<UserEntity>
+  ) {
+    super(factory);
   }
+
   async findByEmail(email: string): Promise<User | null> {
-    const userEntity: UserEntity = await this.userRepository.findOne({
-      where: { email }
-    });
-    return this.userFactory.reconstitute(userEntity);
+    const user = await this.repo.findOne({ where: { email } });
+    if (!user) {
+      return null;
+    }
+
+    return this.entityToModel(user);
   }
 }

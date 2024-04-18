@@ -2,7 +2,6 @@ import { UserRole } from '@/user/domain/user.model';
 import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
-import { IsNull } from 'typeorm';
 
 registerEnumType(UserRole, {
   name: 'RoleEnum'

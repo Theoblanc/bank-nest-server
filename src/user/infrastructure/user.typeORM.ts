@@ -1,5 +1,5 @@
 import { IUserRepository } from '@/user/domain/user.repository';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import UserEntity from '@/user/infrastructure/user.entity';
 import { Repository } from 'typeorm';
 import { UserFactory } from '@/user/domain/user.factory';
@@ -12,15 +12,29 @@ export class UserTypeORM
   extends BaseTypeORM<UserEntity, User>
   implements IUserRepository
 {
+  readonly logger: Logger;
+
   constructor(
     readonly factory: UserFactory,
-    @InjectRepository(UserEntity) readonly repo: Repository<UserEntity>
+    @InjectRepository(UserEntity) readonly userRepo: Repository<UserEntity>
   ) {
     super(factory);
+    this.logger = new Logger(this.constructor.name);
   }
 
+  async save(model: User): Promise<null> {
+    try {
+      const entity = this.modelToEntity(model);
+
+      const result = await this.userRepo.save(entity);
+      this.logger.log(`Saved with the following id: ${result.id}`);
+      return null;
+    } catch (error) {
+      this.logger.error(error);
+    }
+  }
   async findByEmail(email: string): Promise<User | null> {
-    const user = await this.repo.findOne({ where: { email } });
+    const user = await this.userRepo.findOne({ where: { email } });
     if (!user) {
       return null;
     }

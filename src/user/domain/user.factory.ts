@@ -17,6 +17,7 @@ export class UserFactory {
       new UserImplement(properties)
     );
   }
+
   reconstitute(properties: UserProperties): User {
     return this.eventPublisher.mergeObjectContext(
       new UserImplement(properties)

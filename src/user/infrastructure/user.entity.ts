@@ -11,10 +11,10 @@ export default class UserEntity extends BaseEntity implements UserProperties {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   password?: string;
 
-  @Column()
+  @Column({ nullable: true })
   phone?: string;
 
   @Column({

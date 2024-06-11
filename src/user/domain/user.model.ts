@@ -43,7 +43,7 @@ export class UserImplement extends AggregateRoot implements User {
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
   private readonly deletedAt?: Date;
-  private readonly accounts: AccountProperties[];
+  private accounts: AccountProperties[];
 
   constructor(properties: UserProperties) {
     super();
@@ -52,6 +52,17 @@ export class UserImplement extends AggregateRoot implements User {
 
   register(): void {
     this.apply(new UserRegisteredEvent(this.properties()));
+  }
+
+  linkAccount(account: AccountProperties): void {
+    if (this.accounts) {
+      const index = this.accounts.findIndex((acc) => acc.id === account.id);
+      if (index === -1) {
+        this.accounts.push(account);
+      } else {
+        this.accounts = [account];
+      }
+    }
   }
 
   properties(): UserProperties {

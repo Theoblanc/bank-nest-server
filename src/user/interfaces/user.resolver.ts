@@ -7,6 +7,7 @@ import { UserDTO } from '../application/query/user.dto';
 import { RegisterUserCommand } from '../application/command/register-user.command';
 import { UserRole } from '../domain/user.model';
 import { RegisterUserArgsDTO } from './dto/register-user.args';
+import { GetMeQuery } from '@/user/application/query/get-me.query';
 
 @Resolver(() => UserDTO)
 export class UserResolver {
@@ -21,6 +22,11 @@ export class UserResolver {
   @Query(() => UserDTO)
   async findUser(@Args('email') email: string) {
     return this.repository.findByEmail(email);
+  }
+
+  @Query(() => UserDTO, { nullable: true })
+  async getMe(@Args('userId') userId: string) {
+    return this.queryBus.execute(new GetMeQuery(userId));
   }
 
   @Mutation(() => String, { nullable: true })

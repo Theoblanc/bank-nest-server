@@ -34,6 +34,8 @@ export class RegisterUserHandler {
 
     user.register();
 
-    this.userRepository.save(user);
+    await this.userRepository.save(user);
+
+    user.commit();
   }
 }

@@ -1,7 +1,7 @@
 import { IUserRepository } from '@/user/domain/user.repository';
 import { Injectable, Logger } from '@nestjs/common';
 import UserEntity from '@/user/infrastructure/user.entity';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { UserFactory } from '@/user/domain/user.factory';
 import { User } from '@/user/domain/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -40,5 +40,9 @@ export class UserTypeORM
     }
 
     return this.entityToModel(user);
+  }
+
+  async findOne(option: FindOneOptions) {
+    return await this.userRepo.findOne(option);
   }
 }

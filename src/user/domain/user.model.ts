@@ -9,6 +9,7 @@ export enum UserRole {
 }
 
 export interface User {
+  commit: () => void;
   register: () => void;
   properties: () => UserProperties;
 }

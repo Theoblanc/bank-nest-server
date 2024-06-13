@@ -1,6 +1,6 @@
 # ########## BUILD FOR LOCAL DEVELOPMENT ##########
 
-FROM node:18-alpine AS development
+FROM node:20-alpine AS development
 
 WORKDIR /usr/src/app
 
@@ -12,13 +12,9 @@ RUN yarn install --frozen-lockfile
 COPY . .
 USER node
 
-# Bundle app source and switch user
-COPY . .
-USER node
-
 # ########## BUILD FOR PRODUCTION ##########
 
-FROM node:18-alpine AS build
+FROM node:20-alpine AS build
 
 WORKDIR /usr/src/app
 
@@ -37,7 +33,9 @@ USER node
 
 # ########## PRODUCTION ##########
 
-FROM node:18-alpine AS production
+FROM node:20-alpine AS production
+
+WORKDIR /usr/src/app
 
 # Copy necessary files from build stage
 COPY --from=build /usr/src/app/node_modules ./node_modules

@@ -1,23 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
+import { Injectable } from '@nestjs/common';
+import { CreateCommand, CreateCommandDto } from '@/create-command.handler';
+import { CommandBus } from '@nestjs/cqrs';
 
 @Injectable()
 export class AppService {
-  constructor(
-    @Inject('KAFKA_SERVICE') private readonly kafkaClient: ClientKafka
-  ) {}
+  constructor(private readonly commandBus: CommandBus) {}
 
   getHello(): string {
     return 'Hello World!';
   }
 
-  async onModuleInit() {
-    // 필요한 토픽을 구독합니다.
-    this.kafkaClient.subscribeToResponseOf('my-topic');
-    await this.kafkaClient.connect();
-  }
-
-  async sendHello() {
-    return this.kafkaClient.send('my-topic', { message: 'Hello Kafka' });
+  async create(data: CreateCommandDto) {
+    return this.commandBus.execute(new CreateCommand(data));
   }
 }

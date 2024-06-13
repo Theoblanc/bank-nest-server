@@ -1,6 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { CreateCommandDto } from '@/create-command.handler';
 
 @Controller()
 export class AppController {
@@ -11,8 +11,8 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @MessagePattern('my-topic')
-  receiveMessage(@Payload() message: any) {
-    console.log(message.value); // 받은 메시지 처리
+  @Post()
+  async create(@Body() createCommandDto: CreateCommandDto) {
+    return this.appService.create(createCommandDto);
   }
 }

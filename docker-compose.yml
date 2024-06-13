@@ -5,48 +5,68 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-      # Only will build development stage from our dockerfile
-      target: development
+      target: production
     volumes:
       - .:/usr/src/app
     env_file:
       - .env
-    command: npm run start:dev
+    command: npm run start:prod
     ports:
-      - 4000:4000
+      - ${PORT}:${PORT}
     depends_on:
       - postgres
+      - redis
+      - rabbitmq
     networks:
       - banknet
     healthcheck:
-      test: ['CMD-SHELL', 'curl -f http://localhost:4000/ || exit 1']
+      test: ['CMD-SHELL', 'curl -f http://localhost:${PORT}/ || exit 1']
       interval: 1m
       timeout: 10s
       retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   postgres:
     container_name: bank-rdb
     image: postgres:16-alpine
     environment:
-      - POSTGRES_USER=theo
-      - POSTGRES_PASSWORD=bank
-      - POSTGRES_DB=bank-nest
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     volumes:
       - postgresbankdata:/var/lib/postgresql/data
     networks:
       - banknet
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 512M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   redis:
     container_name: bank-redis
     image: redis:latest
     restart: always
     ports:
-      - 6379:6379
+      - ${REDIS_PORT}:${REDIS_PORT}
     networks:
       - banknet
-
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
       interval: 30s
@@ -54,36 +74,52 @@ services:
       retries: 3
     command: redis-server --appendonly yes
     volumes:
-      - redis.conf:/etc/redis/redis.conf
+      - redisdata:/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
-  kafka:
-    image: confluentinc/cp-kafka:latest
+  rabbitmq:
+    container_name: bank-rabbitmq
+    image: rabbitmq:3-management
     ports:
-      - 9092:9092
-    environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-    depends_on:
-      - zookeeper
+      - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
+      - 15672:15672  # RabbitMQ Management Plugin의 기본 포트
     networks:
       - banknet
-
-  zookeeper:
-    image: confluentinc/cp-zookeeper:latest
-    ports:
-      - 2181:2181
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    networks:
-      - banknet
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
-  redis.conf:
+  redisdata:
   postgresbankdata:
+  rabbitmqdata:
+
 networks:
   banknet:
+    driver: bridge

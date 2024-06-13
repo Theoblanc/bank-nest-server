@@ -23,14 +23,15 @@ const modules = [UserModule, AccountModule, CommonModule];
     }),
     ClientsModule.register([
       {
-        name: 'KAFKA_SERVICE',
-        transport: Transport.KAFKA,
+        name: 'RABBITMQ_SERVICE',
+        transport: Transport.RMQ,
         options: {
-          client: {
-            brokers: ['localhost:9092'] // Kafka 브로커 주소
-          },
-          consumer: {
-            groupId: 'my-consumer-' + Math.random() // 고유한 그룹 ID 설정
+          urls: [
+            `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`
+          ],
+          queue: 'main_queue',
+          queueOptions: {
+            durable: false
           }
         }
       }

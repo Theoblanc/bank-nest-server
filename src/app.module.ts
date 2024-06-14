@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { AccountModule } from './account/account.module';
 import { CommonModule } from '@common/common.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { CommandBus } from '@nestjs/cqrs';
 
 const modules = [UserModule, AccountModule, CommonModule];
 
@@ -21,24 +22,26 @@ const modules = [UserModule, AccountModule, CommonModule];
       isGlobal: true,
       envFilePath: `.env`
     }),
-    ClientsModule.register([
-      {
-        name: 'RABBITMQ_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: [
-            `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`
-          ],
-          queue: 'main_queue',
-          queueOptions: {
-            durable: false
+    ClientsModule.register({
+      clients: [
+        {
+          name: 'RABBITMQ_SERVICE',
+          transport: Transport.RMQ,
+          options: {
+            urls: [
+              `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`
+            ],
+            queue: 'main_queue',
+            queueOptions: {
+              durable: false
+            }
           }
         }
-      }
-    ]),
+      ]
+    }),
     ...modules
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService, CommandBus]
 })
 export class AppModule {}

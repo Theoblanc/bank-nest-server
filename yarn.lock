@@ -1343,6 +1343,13 @@
   resolved "https://registry.npmjs.org/@tsconfig/node16/-/node16-1.0.4.tgz"
   integrity sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==
 
+"@types/amqplib@^0.10.5":
+  version "0.10.5"
+  resolved "https://registry.yarnpkg.com/@types/amqplib/-/amqplib-0.10.5.tgz#fd883eddfbd669702a727fa10007b27c4c1e6ec7"
+  integrity sha512-/cSykxROY7BWwDoi4Y4/jLAuZTshZxd8Ey1QYa/VaXriMotBDoou7V/twJiOSHzU6t1Kp1AHAUXGCgqq+6DNeg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/babel__core@^7.1.14":
   version "7.20.5"
   resolved "https://registry.npmjs.org/@types/babel__core/-/babel__core-7.20.5.tgz"
@@ -3058,7 +3065,7 @@ fastify-plugin@^3.0.0:
   resolved "https://registry.npmjs.org/fastify-plugin/-/fastify-plugin-3.0.1.tgz"
   integrity sha512-qKcDXmuZadJqdTm6vlCqioEbyewF60b/0LOFCcYN1B6BIZGlYJumWWOYs70SFYLDAH4YqdE1cxH/RKMG7rFxgA==
 
-fastify-plugin@^4.0.0, fastify-plugin@^4.2.0, fastify-plugin@^4.3.0:
+fastify-plugin@^4.0.0, fastify-plugin@^4.2.0, fastify-plugin@^4.2.1, fastify-plugin@^4.3.0:
   version "4.5.1"
   resolved "https://registry.npmjs.org/fastify-plugin/-/fastify-plugin-4.5.1.tgz"
   integrity sha512-stRHYGeuqpEZTL1Ef0Ovr2ltazUT9g844X5z/zEBFLG8RYlpDiOCIG+ATvYEp+/zmc7sN29mcIMp8gvYplYPIQ==
@@ -4402,6 +4409,14 @@ memfs@^3.4.1:
   dependencies:
     fs-monkey "^1.0.4"
 
+mercurius-explain@^2.0.9:
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/mercurius-explain/-/mercurius-explain-2.0.9.tgz#59204058feaf45b8a832345403197c6e1880f810"
+  integrity sha512-0HQAGtpabW4N3c34Lgbjwzu0iuCOSbbIGLu212mxqZh27fqF6fuO1a2Ihr5LSsvjfh7jtZt7zMAWgg6ksji5TA==
+  dependencies:
+    fastify-plugin "^4.2.1"
+    semver "7.5.4"
+
 mercurius@^13.0.0, mercurius@^13.3.3:
   version "13.3.3"
   resolved "https://registry.yarnpkg.com/mercurius/-/mercurius-13.3.3.tgz#179c43050f0bfd246172d02f245c70178a8e2a67"
@@ -5274,17 +5289,17 @@ secure-json-parse@^2.4.0, secure-json-parse@^2.7.0:
   resolved "https://registry.npmjs.org/secure-json-parse/-/secure-json-parse-2.7.0.tgz"
   integrity sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==
 
-semver@^6.3.0, semver@^6.3.1:
-  version "6.3.1"
-  resolved "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz"
-  integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
-
-semver@^7.3.4, semver@^7.3.5, semver@^7.3.8, semver@^7.5.3, semver@^7.5.4:
+semver@7.5.4, semver@^7.3.4, semver@^7.3.5, semver@^7.3.8, semver@^7.5.3, semver@^7.5.4:
   version "7.5.4"
   resolved "https://registry.npmjs.org/semver/-/semver-7.5.4.tgz"
   integrity sha512-1bCSESV6Pv+i21Hvpxp3Dx+pSD8lIPt8uVjRrxAUt/nbswYc+tK6Y2btiULjd4+fnq15PX+nqQDC7Oft7WkwcA==
   dependencies:
     lru-cache "^6.0.0"
+
+semver@^6.3.0, semver@^6.3.1:
+  version "6.3.1"
+  resolved "https://registry.npmjs.org/semver/-/semver-6.3.1.tgz"
+  integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
 
 serialize-javascript@^6.0.1:
   version "6.0.1"

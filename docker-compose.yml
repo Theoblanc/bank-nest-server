@@ -10,18 +10,21 @@ services:
       - .:/usr/src/app
     env_file:
       - .env
-    command: npm run start:prod
+    command: npm run start:dev
     ports:
-      - ${PORT}:${PORT}
+      - "4000:4000"
     depends_on:
-      - postgres
-      - redis
-      - rabbitmq
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     networks:
       - banknet
     healthcheck:
-      test: ['CMD-SHELL', 'curl -f http://localhost:${PORT}/ || exit 1']
-      interval: 1m
+      test: ['CMD-SHELL', 'curl -f http://localhost:4000/ || exit 1']
+      interval: 1m30s  # interval을 1분 30초로 조정
       timeout: 10s
       retries: 3
     deploy:
@@ -35,19 +38,55 @@ services:
         max-size: "10m"
         max-file: "3"
 
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    networks:
+      - banknet
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics ping"]
+      interval: 1m30s  # interval을 1분 30초로 조정
+      timeout: 10s
+      retries: 3
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
   postgres:
     container_name: bank-rdb
     image: postgres:16-alpine
+    env_file:
+      - .env
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - "5432:5432"
     volumes:
       - postgresbankdata:/var/lib/postgresql/data
     networks:
       - banknet
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 1m30s  # interval을 1분 30초로 조정
+      timeout: 10s
+      retries: 3
     deploy:
       resources:
         limits:
@@ -63,47 +102,20 @@ services:
     container_name: bank-redis
     image: redis:latest
     restart: always
+    env_file:
+      - .env
     ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
+      - "6379:6379"
     networks:
       - banknet
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
-      interval: 30s
+      interval: 1m30s  # interval을 1분 30초로 조정
       timeout: 10s
       retries: 3
     command: redis-server --appendonly yes
     volumes:
       - redisdata:/data
-    deploy:
-      resources:
-        limits:
-          cpus: '0.25'
-          memory: 256M
-    logging:
-      driver: json-file
-      options:
-        max-size: "10m"
-        max-file: "3"
-
-  rabbitmq:
-    container_name: bank-rabbitmq
-    image: rabbitmq:3-management
-    ports:
-      - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
-      - 15672:15672  # RabbitMQ Management Plugin의 기본 포트
-    networks:
-      - banknet
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
-    healthcheck:
-      test: ["CMD-SHELL", "rabbitmq-diagnostics ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    volumes:
-      - rabbitmqdata:/var/lib/rabbitmq
     deploy:
       resources:
         limits:
@@ -122,4 +134,3 @@ volumes:
 
 networks:
   banknet:
-    driver: bridge

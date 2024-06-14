@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { GqlOptionsFactory } from '@nestjs/graphql';
-import { join } from 'path';
 import { GRAPHQL_PATH } from '@common/infrastructure/settings/constants';
 
 @Injectable()
@@ -9,10 +8,11 @@ export class GraphQLService implements GqlOptionsFactory {
   createGqlOptions() {
     return {
       path: GRAPHQL_PATH,
-      autoSchemaFile: {
-        path: join(process.cwd(), 'schema.gql')
+      autoSchemaFile: true,
+      graphiql: {
+        enabled: true,
+        plugins: []
       },
-      graphiql: false,
       ide: true
     };
   }

@@ -2,7 +2,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
+  UpdateDateColumn
 } from 'typeorm';
 import { BaseModel } from '../domain/base.model';
 

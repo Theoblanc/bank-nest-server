@@ -9,8 +9,9 @@ import { AccountModule } from './account/account.module';
 import { CommonModule } from '@common/common.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { CommandBus } from '@nestjs/cqrs';
+import { TransactionModule } from '@/transaction/transaction.module';
 
-const modules = [UserModule, AccountModule, CommonModule];
+const modules = [UserModule, AccountModule, TransactionModule, CommonModule];
 
 @Module({
   imports: [

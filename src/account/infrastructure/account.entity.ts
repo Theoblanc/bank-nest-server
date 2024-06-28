@@ -1,6 +1,7 @@
 import { BaseEntity } from '@/common/infrastructure/base.entity';
 import UserEntity from '@/user/infrastructure/user.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { TransactionEntity } from '@/transaction/infrastructure/transaction.entity';
 
 @Entity({ name: 'accounts' })
 export default class AccountEntity extends BaseEntity {
@@ -15,4 +16,10 @@ export default class AccountEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.accounts, { nullable: true })
   user?: UserEntity;
+
+  @OneToMany(() => TransactionEntity, (transaction) => transaction.fromAccount)
+  transactionsFrom?: TransactionEntity[];
+
+  @OneToMany(() => TransactionEntity, (transaction) => transaction.toAccount)
+  transactionsTo?: TransactionEntity[];
 }

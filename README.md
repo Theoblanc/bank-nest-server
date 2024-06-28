@@ -15,37 +15,45 @@ The portfolio project is structured around a core backend system built with Nest
 ```bash
 $ yarn install
 ```
+## Environment Variables
+```bash
+# .env
+# Application
+PORT=
+
+# Postgres
+POSTGRES_HOST=
+POSTGRES_PORT=
+POSTGRES_DB=
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_SYNC=
+DATABASE_LOGGING=
+
+# Redis
+REDIS_HOST=
+REDIS_PORT=
+
+# RabbitMQ
+
+RABBITMQ_USER=
+RABBITMQ_PASSWORD=
+RABBITMQ_HOST=
+RABBITMQ_PORT=
+```
 
 ## Running the app
-
 ```bash
-# development
 $ docker-compose up
 ```
 
 ## Test
-
 ```bash
-# unit tests
 $ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
 ```
 
-## Support
+## ERD (Entity Relationship Diagram)
+Below is the Entity Relationship Diagram (ERD) for the project's database schema:
+![ERD](./assets/erd.png)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

@@ -18,6 +18,7 @@ export class GetMeHandler implements IQueryHandler<GetMeQuery> {
     const foundUser = await this.userRepository.findOne({
       where: { id: query.userId }
     });
+
     if (!foundUser) {
       throw new Error('User not found');
     }

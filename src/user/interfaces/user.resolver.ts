@@ -26,7 +26,8 @@ export class UserResolver {
 
   @Query(() => UserDTO, { nullable: true })
   async getMe(@Args('userId') userId: string) {
-    return this.queryBus.execute(new GetMeQuery(userId));
+    const query = new GetMeQuery(userId);
+    return this.queryBus.execute(query);
   }
 
   @Mutation(() => String, { nullable: true })

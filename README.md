@@ -10,6 +10,15 @@ The portfolio project is structured around a core backend system built with Nest
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+## Features
+
+- **User Management**: User registration, authentication, and profile management.
+- **Account Management**: Create and manage bank accounts, including balance inquiries.
+- **Transaction Management**: Perform and track transactions such as deposits, withdrawals, and transfers.
+- **Transaction History**: View and manage transaction history with detailed status tracking.
+- **Real-time Updates**: Event-driven architecture for real-time data updates.
+- **CQRS**: Separate command and query responsibilities for improved scalability and maintainability.
+
 ## Installation
 
 ```bash
@@ -55,5 +64,3 @@ $ yarn run test
 ## ERD (Entity Relationship Diagram)
 Below is the Entity Relationship Diagram (ERD) for the project's database schema:
 ![ERD](./assets/erd.png)
-
-

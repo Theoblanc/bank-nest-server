@@ -18,6 +18,8 @@ async function bootstrap() {
     type: VersioningType.URI
   });
 
+  app.enableCors();
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.RMQ,
     options: {

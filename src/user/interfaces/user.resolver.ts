@@ -18,14 +18,8 @@ export class UserResolver {
     private readonly repository: IUserRepository
   ) {}
 
-  //QURRY BUS로 만들기
-  @Query(() => UserDTO)
-  async findUser(@Args('email') email: string) {
-    return this.repository.findByEmail(email);
-  }
-
   @Query(() => UserDTO, { nullable: true })
-  async getMe(@Args('userId') userId: string) {
+  async getMe(@Args('input') userId: string) {
     const query = new GetMeQuery(userId);
     return this.queryBus.execute(query);
   }

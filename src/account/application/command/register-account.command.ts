@@ -1,6 +1,7 @@
 import { ICommand } from '@nestjs/cqrs';
 
 export interface IRegisterAccountCommandPayload {
+  readonly userId?: string;
   readonly balance?: number;
 }
 

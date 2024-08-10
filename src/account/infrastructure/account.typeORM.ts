@@ -6,7 +6,7 @@ import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-class AccountTypeORM extends BaseTypeORM<AccountEntity, Account> {
+export class AccountTypeORM extends BaseTypeORM<AccountEntity, Account> {
   private readonly logger: Logger;
   constructor(
     readonly factory: AccountFactory,

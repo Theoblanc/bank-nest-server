@@ -4,6 +4,7 @@ import { Inject, Logger } from '@nestjs/common';
 import { RepositoryToken } from '@common/infrastructure/repository-token';
 import { AccountFactory } from '@/account/domain/account.factory';
 import { IAccountRepository } from '@/account/domain/account.repository';
+import { IUserRepository } from '@/user/domain/user.repository';
 
 @CommandHandler(RegisterAccountCommand)
 export class RegisterAccountCommandHandler {
@@ -11,6 +12,8 @@ export class RegisterAccountCommandHandler {
   constructor(
     @Inject(RepositoryToken.ACCOUNT)
     private readonly accountRepository: IAccountRepository,
+    @Inject(RepositoryToken.USER)
+    private userRepository: IUserRepository,
     private readonly factory: AccountFactory
   ) {
     this.logger = new Logger(this.constructor.name);

@@ -5,8 +5,12 @@ import { AccountFactory } from '@/account/domain/account.factory';
 import { Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { IAccountRepository } from '@/account/domain/account.repository';
 
-export class AccountTypeORM extends BaseTypeORM<AccountEntity, Account> {
+export class AccountTypeORM
+  extends BaseTypeORM<AccountEntity, Account>
+  implements IAccountRepository
+{
   private readonly logger: Logger;
   constructor(
     readonly factory: AccountFactory,
@@ -15,6 +19,17 @@ export class AccountTypeORM extends BaseTypeORM<AccountEntity, Account> {
   ) {
     super(factory);
     this.logger = new Logger(this.constructor.name);
+  }
+
+  async create(account: Account): Promise<Account> {
+    try {
+      const entity = this.modelToEntity(account);
+      const result = this.accountRepo.create(entity);
+      this.logger.log(`Created with the following id: ${result.id}`);
+      return this.entityToModel(result);
+    } catch (error) {
+      this.logger.error(error);
+    }
   }
 
   async save(model: Account): Promise<null> {

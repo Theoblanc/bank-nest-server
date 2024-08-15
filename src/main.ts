@@ -5,7 +5,7 @@ import {
   NestFastifyApplication
 } from '@nestjs/platform-fastify';
 import { setupDoc } from '@common/infrastructure/settings/swagger';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
@@ -17,6 +17,17 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI
   });
+
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true
+      }
+    })
+  );
 
   app.enableCors();
 

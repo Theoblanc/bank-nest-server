@@ -1,11 +1,12 @@
 import { BaseEntity } from '@/common/infrastructure/base.entity';
 import UserEntity from '@/user/infrastructure/user.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, OneToMany } from 'typeorm';
 import { TransactionEntity } from '@/transaction/infrastructure/transaction.entity';
 
 @Entity({ name: 'accounts' })
 export default class AccountEntity extends BaseEntity {
-  @Column()
+  @Column({ length: 14, unique: true })
+  @Index()
   accountNumber: string;
 
   @Column()

@@ -55,7 +55,6 @@ services:
       retries: 3
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
-      - ./rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
     deploy:
       resources:
         limits:
@@ -82,11 +81,6 @@ services:
       - postgresbankdata:/var/lib/postgresql/data
     networks:
       - banknet
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 1m30s  # interval을 1분 30초로 조정
-      timeout: 10s
-      retries: 3
     deploy:
       resources:
         limits:

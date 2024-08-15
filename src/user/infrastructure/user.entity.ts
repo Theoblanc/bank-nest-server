@@ -3,13 +3,16 @@ import { UserProperties, UserRole } from '../domain/user.model';
 import { BaseEntity } from '@/common/infrastructure/base.entity';
 import AccountEntity from '@/account/infrastructure/account.entity';
 import { Exclude } from 'class-transformer';
+import { Field } from '@nestjs/graphql';
 
 @Entity({ name: 'users' })
 export default class UserEntity extends BaseEntity implements UserProperties {
+  @Field()
   @Column({ unique: true })
   email: string;
 
   @Index()
+  @Field()
   @Column()
   name: string;
 
@@ -17,10 +20,11 @@ export default class UserEntity extends BaseEntity implements UserProperties {
   @Exclude()
   password?: string;
 
-  @Index()
+  @Field()
   @Column({ nullable: true })
   phone?: string;
 
+  @Field()
   @Column({
     type: 'enum',
     enum: UserRole,

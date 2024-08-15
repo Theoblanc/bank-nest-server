@@ -18,9 +18,11 @@ export class BaseTypeORM<Entity extends IEntity, Model extends IModel<Entity>>
   implements IBaseRepository<Entity, Model>
 {
   constructor(readonly factory: IFactory<Entity, Model>) {}
+
   newId() {
     return uuidv4();
   }
+
   modelToEntity(model: Model): Entity {
     return model.properties();
   }

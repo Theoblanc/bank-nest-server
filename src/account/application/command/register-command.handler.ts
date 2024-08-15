@@ -20,6 +20,18 @@ export class RegisterAccountCommandHandler {
   }
 
   async execute(command: RegisterAccountCommand): Promise<void> {
-    this.logger.log(`Async ${command.constructor.name}...`);
+    this.logger.error(`Async ${command.constructor.name}...`);
+
+    const user = await this.userRepository.findOne({
+      where: { id: command.payload.userId }
+    });
+    const account = this.factory.create({
+      id: this.accountRepository.newId(),
+      ownerName: user.name,
+      accountNumber: '12345678911234',
+      balance: command.payload?.balance
+    });
+
+    account.console.log(account);
   }
 }

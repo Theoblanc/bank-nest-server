@@ -7,6 +7,7 @@ export interface Account {
   getBalance: () => number;
   deposit: (amount: number) => void;
   withdraw: (amount: number) => void;
+  commit: () => void;
 }
 
 export type AccountEssentialProperties = Required<{

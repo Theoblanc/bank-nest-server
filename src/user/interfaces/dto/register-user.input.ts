@@ -8,7 +8,7 @@ registerEnumType(UserRole, {
 });
 
 @InputType()
-export class RegisterUserArgsDTO {
+export class RegisterUserInputDTO {
   @Field(() => String, { description: 'user email' })
   @IsEmail()
   @Transform(({ value }) => value.toLowerCase())

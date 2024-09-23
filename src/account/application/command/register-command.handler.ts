@@ -32,6 +32,8 @@ export class RegisterAccountCommandHandler {
       balance: command.payload?.balance
     });
 
-    account.console.log(account);
+    await this.accountRepository.save(account);
+
+    account.commit();
   }
 }

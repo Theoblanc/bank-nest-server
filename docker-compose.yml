@@ -12,7 +12,7 @@ services:
       - .env
     command: npm run start:dev
     ports:
-      - "4000:4000"
+      - '4000:4000'
     depends_on:
       postgres:
         condition: service_healthy
@@ -24,7 +24,7 @@ services:
       - banknet
     healthcheck:
       test: ['CMD-SHELL', 'curl -f http://localhost:4000/ || exit 1']
-      interval: 1m30s  # interval을 1분 30초로 조정
+      interval: 1m30s # interval을 1분 30초로 조정
       timeout: 10s
       retries: 3
     deploy:
@@ -35,22 +35,22 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: '10m'
+        max-file: '3'
 
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - '5672:5672'
+      - '15672:15672'
     networks:
       - banknet
     environment:
       - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "rabbitmq-diagnostics ping"]
-      interval: 1m30s  # interval을 1분 30초로 조정
+      test: ['CMD-SHELL', 'rabbitmq-diagnostics ping']
+      interval: 1m30s # interval을 1분 30초로 조정
       timeout: 10s
       retries: 3
     volumes:
@@ -63,8 +63,8 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: '10m'
+        max-file: '3'
 
   postgres:
     container_name: bank-rdb
@@ -76,7 +76,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgresbankdata:/var/lib/postgresql/data
     networks:
@@ -89,8 +89,8 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: '10m'
+        max-file: '3'
 
   redis:
     container_name: bank-redis
@@ -99,12 +99,12 @@ services:
     env_file:
       - .env
     ports:
-      - "6379:6379"
+      - '6379:6379'
     networks:
       - banknet
     healthcheck:
       test: ['CMD', 'redis-cli', 'ping']
-      interval: 1m30s  # interval을 1분 30초로 조정
+      interval: 1m30s # interval을 1분 30초로 조정
       timeout: 10s
       retries: 3
     command: redis-server --appendonly yes
@@ -118,8 +118,8 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: "10m"
-        max-file: "3"
+        max-size: '10m'
+        max-file: '3'
 
 volumes:
   redisdata:

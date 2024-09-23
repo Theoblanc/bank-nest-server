@@ -21,9 +21,9 @@ export class AccountTypeORM
     this.logger = new Logger(this.constructor.name);
   }
 
-  async create(account: Account): Promise<Account> {
+  create(model: Account): Account {
     try {
-      const entity = this.modelToEntity(account);
+      const entity = this.modelToEntity(model);
       const result = this.accountRepo.create(entity);
       this.logger.log(`Created with the following id: ${result.id}`);
       return this.entityToModel(result);

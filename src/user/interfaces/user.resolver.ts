@@ -6,7 +6,7 @@ import UserEntity from '../infrastructure/user.entity';
 import { UserDTO } from '../application/query/user.dto';
 import { RegisterUserCommand } from '../application/command/register-user.command';
 import { UserRole } from '../domain/user.model';
-import { RegisterUserArgsDTO } from './dto/register-user.args';
+import { RegisterUserInputDTO } from './dto/register-user.input';
 import { GetMeQuery } from '@/user/application/query/get-me.query';
 
 @Resolver(() => UserDTO)
@@ -25,7 +25,7 @@ export class UserResolver {
   }
 
   @Mutation(() => String, { nullable: true })
-  async registerUser(@Args('input') args: RegisterUserArgsDTO) {
+  async registerUser(@Args('input') args: RegisterUserInputDTO) {
     const { email, name, role = UserRole.USER } = args;
     const command = new RegisterUserCommand({
       email,
@@ -33,6 +33,6 @@ export class UserResolver {
       role
     });
 
-    await this.commandBus.execute(command);
+    return await this.commandBus.execute(command);
   }
 }

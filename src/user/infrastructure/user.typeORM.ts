@@ -25,7 +25,6 @@ export class UserTypeORM
   async save(model: User): Promise<null> {
     try {
       const entity = this.modelToEntity(model);
-
       const result = await this.userRepo.save(entity);
       this.logger.log(`Saved with the following id: ${result.id}`);
       return null;

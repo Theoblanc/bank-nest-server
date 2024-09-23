@@ -4,8 +4,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import UserEntity from '@/user/infrastructure/user.entity';
 import { RepositoryToken } from '@common/infrastructure/repository-token';
 import { UserTypeORM } from '@/user/infrastructure/user.typeORM';
-import { UserFactory } from '@/user/domain/user.factory';
-import { UserImplement } from '@/user/domain/user.model';
 import { CqrsModule } from '@nestjs/cqrs';
 import { RegisterUserHandler } from '@/user/application/command/register-user.handler';
 import { GetMeHandler } from '@/user/application/query/get-me.handler';
@@ -15,7 +13,7 @@ export const UserRepositoryImpl: Provider = {
   useClass: UserTypeORM
 };
 
-const resolver = [UserResolver, UserFactory, UserImplement];
+const resolver = [UserResolver];
 const handler = [RegisterUserHandler, GetMeHandler];
 
 @Module({

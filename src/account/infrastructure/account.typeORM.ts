@@ -2,7 +2,7 @@ import { BaseTypeORM } from '@common/infrastructure/base.typeORM';
 import AccountEntity from '@/account/infrastructure/account.entity';
 import { Account } from '@/account/domain/account.model';
 import { AccountFactory } from '@/account/domain/account.factory';
-import { Logger } from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IAccountRepository } from '@/account/domain/account.repository';
@@ -28,7 +28,10 @@ export class AccountTypeORM
       this.logger.log(`Created with the following id: ${result.id}`);
       return this.entityToModel(result);
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(`Failed to create account entity: ${error}`);
+      throw new InternalServerErrorException(
+        `Failed to create account entity: ${error}`
+      );
     }
   }
 
@@ -39,7 +42,11 @@ export class AccountTypeORM
       this.logger.log(`Saved with the following id: ${result.id}`);
       return null;
     } catch (error) {
-      this.logger.error(error);
+      this.logger.error(`Failed to save account: ${error}`);
+
+      throw new InternalServerErrorException(
+        `Failed to save account: ${error}`
+      );
     }
   }
 }

@@ -15,8 +15,8 @@ export default class AccountEntity extends BaseEntity {
   @Column('decimal', { precision: 10, scale: 2 })
   balance: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.accounts, { nullable: true })
-  user?: UserEntity;
+  @ManyToOne(() => UserEntity, (user) => user.accounts)
+  user: UserEntity;
 
   @OneToMany(() => TransactionEntity, (transaction) => transaction.fromAccount)
   transactionsFrom?: TransactionEntity[];

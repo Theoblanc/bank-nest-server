@@ -32,6 +32,6 @@ export default class UserEntity extends BaseEntity implements UserProperties {
   })
   role: UserRole;
 
-  @OneToMany(() => AccountEntity, (account) => account.user, { nullable: true })
+  @OneToMany(() => AccountEntity, (account) => account.user)
   accounts?: AccountEntity[];
 }

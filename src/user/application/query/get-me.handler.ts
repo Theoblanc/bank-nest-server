@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { GetMeQuery } from './get-me.query';
-import { UserDTO } from '@/user/application/query/user.dto';
+import { UserDTO } from '@/user/interfaces/dto/user.dto';
 import { Inject } from '@nestjs/common';
 import { RepositoryToken } from '@common/infrastructure/repository-token';
 import { IUserRepository } from '@/user/domain/user.repository';

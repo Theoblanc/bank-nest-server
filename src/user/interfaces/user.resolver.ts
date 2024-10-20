@@ -3,7 +3,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { IUserRepository } from '../domain/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import UserEntity from '../infrastructure/user.entity';
-import { UserDTO } from '../application/query/user.dto';
+import { UserDTO } from './dto/user.dto';
 import { RegisterUserCommand } from '../application/command/register-user.command';
 import { UserRole } from '../domain/user.model';
 import { RegisterUserInputDTO } from './dto/register-user.input';

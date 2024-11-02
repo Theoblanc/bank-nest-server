@@ -27,8 +27,10 @@ export class RegisterAccountCommandHandler {
     });
     const account = this.factory.create({
       id: this.accountRepository.newId(),
+      type: command.payload.accountType,
       ownerName: user.name,
       accountNumber: '12345678911234',
+      user,
       balance: command.payload?.balance
     });
 

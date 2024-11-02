@@ -9,8 +9,9 @@ export class AccountResolver {
   constructor(private readonly commandBus: CommandBus) {}
   @Mutation(() => String, { nullable: true })
   async registerAccount(@Args('input') args: AccountArgsDto) {
-    const { userId, balance } = args;
+    const { userId, balance, accountType } = args;
     const command = new RegisterAccountCommand({
+      accountType,
       userId,
       balance
     });

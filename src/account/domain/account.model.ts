@@ -2,6 +2,11 @@ import { BaseModel } from '@/common/domain/base.model';
 import { UserProperties } from '@/user/domain/user.model';
 import { AggregateRoot } from '@nestjs/cqrs';
 
+export enum AccountType {
+  BUSINESS = 'BUSINESS',
+  PERSONAL = 'PERSONAL'
+}
+
 export interface Account {
   properties: () => AccountProperties;
   getBalance: () => number;
@@ -12,28 +17,25 @@ export interface Account {
 
 export type AccountEssentialProperties = Required<{
   id: string;
+  type: AccountType;
   accountNumber: string;
   ownerName: string;
   balance: number;
+  user: UserProperties;
 }>;
 
-export type AccountOptionalProperties = Partial<{
-  user?: UserProperties;
-}>;
-
-export type AccountProperties = BaseModel &
-  AccountEssentialProperties &
-  AccountOptionalProperties;
+export type AccountProperties = BaseModel & AccountEssentialProperties;
 
 export class AccountImplement extends AggregateRoot implements Account {
   private readonly id: string;
+  private readonly type: AccountType;
   private readonly accountNumber: string;
   private readonly ownerName: string;
   private balance: number;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
   private readonly deletedAt?: Date;
-  private readonly user?: UserProperties;
+  private user: UserProperties;
 
   constructor(properties: AccountProperties) {
     super();
@@ -47,13 +49,14 @@ export class AccountImplement extends AggregateRoot implements Account {
   properties(): AccountProperties {
     return {
       id: this.id,
+      type: this.type,
       accountNumber: this.accountNumber,
       ownerName: this.ownerName,
       balance: this.balance,
+      user: this.user,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      deletedAt: this.deletedAt,
-      user: this.user
+      deletedAt: this.deletedAt
     };
   }
 

@@ -1,9 +1,9 @@
-import { CacheStore } from '@nestjs/cache-manager';
 import Keyv from 'keyv';
 import KeyvRedis from '@keyv/redis';
 import Redis from 'ioredis';
+import { ICacheStore } from '@common/infrastructure/cache/cache-store.interface';
 
-export class KeyvStore implements CacheStore {
+export class KeyvStore implements ICacheStore {
   private keyv: Keyv;
 
   constructor() {
@@ -32,5 +32,9 @@ export class KeyvStore implements CacheStore {
 
   async del(key: string): Promise<void> {
     await this.keyv.delete(key);
+  }
+
+  async reset(): Promise<void> {
+    await this.keyv.clear();
   }
 }

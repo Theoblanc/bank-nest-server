@@ -1,5 +1,10 @@
 import { UserProperties, UserRole } from '@/user/domain/user.model';
-import { Field, ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType, registerEnumType } from '@nestjs/graphql';
+
+registerEnumType(UserRole, {
+  name: 'UserRole',
+  description: '유저 권한'
+});
 
 @ObjectType()
 export class UserDTO implements UserProperties {

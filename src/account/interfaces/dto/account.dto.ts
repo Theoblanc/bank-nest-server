@@ -2,6 +2,12 @@ import { Field, ID, InputType, Int } from '@nestjs/graphql';
 import { AccountProperties, AccountType } from '@/account/domain/account.model';
 import { IsNotEmpty } from 'class-validator';
 import { UserProperties } from '@/user/domain/user.model';
+import { registerEnumType } from '@nestjs/graphql';
+
+registerEnumType(AccountType, {
+  name: 'AccountType',
+  description: '계좌 유형'
+});
 
 @InputType()
 export class AccountDto implements AccountProperties {

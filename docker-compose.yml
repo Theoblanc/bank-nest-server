@@ -79,6 +79,12 @@ services:
       - '5432:5432'
     volumes:
       - postgresbankdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 1m30s  # 다른 서비스들과 동일한 간격
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     networks:
       - banknet
     deploy:
@@ -98,6 +104,8 @@ services:
     restart: always
     env_file:
       - .env
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - '6379:6379'
     networks:

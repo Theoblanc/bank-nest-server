@@ -1,6 +1,8 @@
 import { BaseModel } from '@/common/domain/base.model';
 import { UserProperties } from '@/user/domain/user.model';
 import { AggregateRoot } from '@nestjs/cqrs';
+import { Money } from '@common/domain/value-objects/money.vo';
+import { AccountDepositedEvent } from '@/account/domain/events/account-deposited.event';
 
 export enum AccountType {
   BUSINESS = 'BUSINESS',
@@ -31,7 +33,7 @@ export class AccountImplement extends AggregateRoot implements Account {
   private readonly type: AccountType;
   private readonly accountNumber: string;
   private readonly ownerName: string;
-  private balance: number;
+  private balance: Money;
   private readonly createdAt?: Date;
   private readonly updatedAt?: Date;
   private readonly deletedAt?: Date;
@@ -61,14 +63,20 @@ export class AccountImplement extends AggregateRoot implements Account {
   }
 
   getBalance(): number {
-    return this.balance;
+    return this.balance.toNumber();
   }
 
   deposit(amount: number): void {
-    if (amount <= 0) {
-      throw new Error('Deposit amount must be greater than zero.');
-    }
-    this.balance += amount;
+    const depositAmount = new Money(amount);
+    this.balance = this.balance.add(depositAmount);
+    this.apply(
+      new AccountDepositedEvent(
+        this.id,
+        amount,
+        this.balance.toNumber(),
+        new Date()
+      )
+    );
   }
 
   withdraw(amount: number): void {

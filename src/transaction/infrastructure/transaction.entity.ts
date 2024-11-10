@@ -20,14 +20,20 @@ export class TransactionEntity extends BaseEntity {
   transactionType: TransactionType;
 
   @ManyToOne(() => AccountEntity, (account) => account.transactionsFrom)
-  @JoinColumn({ name: 'fromAccountId' })
+  @JoinColumn({ name: 'from_account_id' })
   @Index()
   fromAccount: AccountEntity;
 
+  @Column('uuid', { name: 'from_account_id' })
+  fromAccountId: string;
+
   @ManyToOne(() => AccountEntity, (account) => account.transactionsTo)
-  @JoinColumn({ name: 'toAccountId' })
+  @JoinColumn({ name: 'to_account_id' })
   @Index()
   toAccount: AccountEntity;
+
+  @Column('uuid', { name: 'to_account_id' })
+  toAccountId: string;
 
   @Column('varchar', { length: 255, nullable: true })
   description: string | null;

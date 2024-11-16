@@ -1,4 +1,4 @@
-import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import { EventBus, EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import { Injectable, Logger } from '@nestjs/common';
 import { AccountDepositedEvent } from '@/account/domain/events/account-deposited.event';
 
@@ -9,14 +9,14 @@ export class AccountDepositedHandler
 {
   private readonly logger;
 
-  constructor() {
+  constructor(private eventBus: EventBus) {
     this.logger = new Logger(this.constructor.name);
   }
 
   async handle(event: AccountDepositedEvent) {
     try {
       this.logger.log(
-        `Handling AccountDepositedEvent for account ${event.accountId}`
+        `Handling AccountDepositedEvent for account ${event.payload.accountId}...`
       );
     } catch (error) {
       this.logger.error(

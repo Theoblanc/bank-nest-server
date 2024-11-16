@@ -13,9 +13,7 @@ import { GetMeQuery } from '@/user/application/query/get-me.query';
 export class UserResolver {
   constructor(
     private readonly queryBus: QueryBus,
-    private readonly commandBus: CommandBus,
-    @InjectRepository(UserEntity)
-    private readonly repository: IUserRepository
+    private readonly commandBus: CommandBus
   ) {}
 
   @Query(() => UserDTO, { nullable: true })

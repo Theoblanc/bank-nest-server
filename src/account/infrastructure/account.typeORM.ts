@@ -4,7 +4,7 @@ import { Account } from '@/account/domain/account.model';
 import { AccountFactory } from '@/account/domain/account.factory';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOneOptions, Repository } from 'typeorm';
 import { IAccountRepository } from '@/account/domain/account.repository';
 
 export class AccountTypeORM
@@ -46,6 +46,32 @@ export class AccountTypeORM
 
       throw new InternalServerErrorException(
         `Failed to save account: ${error}`
+      );
+    }
+  }
+
+  async findOne(options: FindOneOptions): Promise<Account> {
+    const account = await this.accountRepo.findOne(options);
+    return this.entityToModel(account);
+  }
+
+  async update(id: string, updatedAccount: Account): Promise<Account> {
+    try {
+      const account = await this.accountRepo.findOne({ where: { id } });
+      if (!account) {
+        throw new InternalServerErrorException(
+          `Account with ID ${id} not found`
+        );
+      }
+
+      Object.assign(account, updatedAccount);
+      const result = await this.accountRepo.save(account);
+      this.logger.log(`Updated account with ID: ${result.id}`);
+      return this.entityToModel(result);
+    } catch (error) {
+      this.logger.error(`Failed to update account with ID ${id}: ${error}`);
+      throw new InternalServerErrorException(
+        `Failed to update account with ID ${id}: ${error}`
       );
     }
   }

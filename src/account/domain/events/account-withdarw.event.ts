@@ -1,6 +1,6 @@
-export class AccountDepositedEvent {
+export class AccountWithdrawEvent {
   constructor(
-    public readonly payload: {
+    private readonly payload: {
       accountId: string;
       balance: number;
     }

@@ -32,7 +32,7 @@ const modules = [UserModule, AccountModule, TransactionModule, CommonModule];
             urls: [
               `amqp://${process.env.RABBITMQ_USER}:${process.env.RABBITMQ_PASSWORD}@${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`
             ],
-            queue: 'main_queue',
+            queue: 'banking_queue',
             queueOptions: {
               durable: false
             }

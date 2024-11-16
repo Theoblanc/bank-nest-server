@@ -10,6 +10,6 @@ import { CACHE_STORE } from '@common/domain/constants/cache.constants';
       useClass: KeyvStore
     }
   ],
-  exports: ['CACHE_REDIS']
+  exports: [CACHE_STORE]
 })
 export class CacheModule {}

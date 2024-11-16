@@ -3,6 +3,7 @@ import { UserProperties } from '@/user/domain/user.model';
 import { AggregateRoot } from '@nestjs/cqrs';
 import { Money } from '@common/domain/value-objects/money.vo';
 import { AccountDepositedEvent } from '@/account/domain/events/account-deposited.event';
+import { AccountWithdarwEvent } from '@/account/domain/events/account-withdarw.event';
 
 export enum AccountType {
   BUSINESS = 'BUSINESS',
@@ -54,7 +55,7 @@ export class AccountImplement extends AggregateRoot implements Account {
       type: this.type,
       accountNumber: this.accountNumber,
       ownerName: this.ownerName,
-      balance: this.balance,
+      balance: this.balance.toNumber(),
       user: this.user,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
@@ -70,22 +71,21 @@ export class AccountImplement extends AggregateRoot implements Account {
     const depositAmount = new Money(amount);
     this.balance = this.balance.add(depositAmount);
     this.apply(
-      new AccountDepositedEvent(
-        this.id,
-        amount,
-        this.balance.toNumber(),
-        new Date()
-      )
+      new AccountDepositedEvent({
+        accountId: this.id,
+        balance: this.balance.toNumber()
+      })
     );
   }
 
   withdraw(amount: number): void {
-    if (amount <= 0) {
-      throw new Error('Withdrawal amount must be greater than zero.');
-    }
-    if (this.balance < amount) {
-      throw new Error('Insufficient funds.');
-    }
-    this.balance -= amount;
+    const withdrawAmount = new Money(amount);
+    this.balance = this.balance.subtract(withdrawAmount);
+    this.apply(
+      new AccountWithdarwEvent({
+        accountId: this.id,
+        balance: this.balance.toNumber()
+      })
+    );
   }
 }

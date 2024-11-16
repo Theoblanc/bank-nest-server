@@ -8,7 +8,7 @@ import { IUserRepository } from '@/user/domain/user.repository';
 
 @CommandHandler(RegisterAccountCommand)
 export class RegisterAccountCommandHandler {
-  readonly logger;
+  private readonly logger: Logger;
   constructor(
     @Inject(RepositoryToken.ACCOUNT)
     private readonly accountRepository: IAccountRepository,
@@ -20,17 +20,20 @@ export class RegisterAccountCommandHandler {
   }
 
   async execute(command: RegisterAccountCommand): Promise<void> {
-    this.logger.error(`Async ${command.constructor.name}...`);
+    this.logger.log(`Async ${command.constructor.name}...`);
 
     const user = await this.userRepository.findOne({
       where: { id: command.payload.userId }
     });
+
+    const userProperties = user.properties();
+
     const account = this.factory.create({
       id: this.accountRepository.newId(),
       type: command.payload.accountType,
-      ownerName: user.name,
+      ownerName: userProperties.name,
       accountNumber: '12345678911234',
-      user,
+      user: userProperties,
       balance: command.payload?.balance
     });
 

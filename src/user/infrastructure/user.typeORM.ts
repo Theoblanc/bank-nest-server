@@ -41,7 +41,8 @@ export class UserTypeORM
     return this.entityToModel(user);
   }
 
-  async findOne(option: FindOneOptions) {
-    return await this.userRepo.findOne(option);
+  async findOne(option: FindOneOptions): Promise<User> {
+    const user = await this.userRepo.findOne(option);
+    return this.entityToModel(user);
   }
 }

@@ -3,7 +3,7 @@ import { UserProperties } from '@/user/domain/user.model';
 import { AggregateRoot } from '@nestjs/cqrs';
 import { Money } from '@common/domain/value-objects/money.vo';
 import { AccountDepositedEvent } from '@/account/domain/events/account-deposited.event';
-import { AccountWithdarwEvent } from '@/account/domain/events/account-withdarw.event';
+import { AccountWithdrawEvent } from '@/account/domain/events/account-withdarw.event';
 
 export enum AccountType {
   BUSINESS = 'BUSINESS',
@@ -82,7 +82,7 @@ export class AccountImplement extends AggregateRoot implements Account {
     const withdrawAmount = new Money(amount);
     this.balance = this.balance.subtract(withdrawAmount);
     this.apply(
-      new AccountWithdarwEvent({
+      new AccountWithdrawEvent({
         accountId: this.id,
         balance: this.balance.toNumber()
       })

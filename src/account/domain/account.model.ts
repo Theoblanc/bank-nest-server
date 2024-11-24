@@ -45,10 +45,6 @@ export class AccountImplement extends AggregateRoot implements Account {
     Object.assign(this, properties);
   }
 
-  get accountId() {
-    return this.id;
-  }
-
   properties(): AccountProperties {
     return {
       id: this.id,

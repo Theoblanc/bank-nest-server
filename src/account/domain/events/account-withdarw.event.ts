@@ -1,10 +1,8 @@
 export class AccountWithdrawEvent {
   constructor(
-    private readonly payload: {
+    public readonly payload: {
       accountId: string;
       balance: number;
     }
-  ) {
-    Object.assign(this, payload);
-  }
+  ) {}
 }

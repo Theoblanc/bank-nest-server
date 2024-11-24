@@ -4,7 +4,5 @@ export interface IAccountDepositedEvent {
 }
 
 export class AccountDepositedEvent {
-  constructor(public readonly payload: IAccountDepositedEvent) {
-    Object.assign(this, payload);
-  }
+  constructor(public readonly payload: IAccountDepositedEvent) {}
 }

@@ -6,6 +6,9 @@ import {
 } from '@/transaction/infrastructure/transaction.entity';
 import { AccountProperties } from '@/account/domain/account.model';
 import { Money } from '@common/domain/value-objects/money.vo';
+import { TransferRequestedEvent } from '@/account/domain/events/transfer-requested.event';
+import { AccountDepositedEvent } from '@/account/domain/events/account-deposited.event';
+import { AccountWithdrawEvent } from '@/account/domain/events/account-withdarw.event';
 
 export interface Transaction {
   commit: () => void;
@@ -105,25 +108,26 @@ export class TransactionImplement extends AggregateRoot implements Transaction {
       new TransferRequestedEvent({
         fromAccountId: this.fromAccountId,
         toAccountId: this.toAccountId,
-        amount: this.amount
+        amount: this.amount.toNumber(),
+        description: this.description
       })
     );
   }
 
   private deposit(): void {
     return this.apply(
-      new AccountDepositRequestedEvent({
+      new AccountDepositedEvent({
         accountId: this.toAccountId,
-        amount: this.amount
+        balance: this.amount.toNumber()
       })
     );
   }
 
   private withdrawal(): void {
     return this.apply(
-      new AccountWithdrawRequestedEvent({
+      new AccountWithdrawEvent({
         accountId: this.fromAccountId,
-        amount: this.amount
+        balance: this.amount.toNumber()
       })
     );
   }

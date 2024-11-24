@@ -16,12 +16,6 @@ export class AccountDepositedSaga {
         console.log(
           `Saga handling AccountDepositedEvent for account ${event.payload.accountId}`
         );
-
-        // // RegisterTransactionCommand 발행
-        // return new RegisterTransactionCommand(
-        //   event.payload.accountId,
-        //   event.payload.balance
-        // );
       })
     );
   };

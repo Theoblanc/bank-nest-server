@@ -1,7 +1,13 @@
+import { TransactionType } from '@/transaction/infrastructure/transaction.entity';
+
+export interface IRegisterTransactionPayload {
+  transactionType: TransactionType;
+  fromAccountId: string | null;
+  toAccountId: string;
+  amount: number;
+  description?: string;
+}
+
 export class RegisterTransactionCommand {
-  constructor(
-    private readonly payload: {
-      accountId: string;
-    }
-  ) {}
+  constructor(readonly payload: IRegisterTransactionPayload) {}
 }

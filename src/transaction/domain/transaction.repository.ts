@@ -3,4 +3,6 @@ import { TransactionEntity } from '@/transaction/infrastructure/transaction.enti
 import { Transaction } from '@/transaction/domain/transaction.model';
 
 export interface ITransactionRepository
-  extends IBaseRepository<TransactionEntity, Transaction> {}
+  extends IBaseRepository<TransactionEntity, Transaction> {
+  save(transaction: Transaction): Promise<null>;
+}

@@ -64,7 +64,7 @@ export class AccountImplement extends AggregateRoot implements Account {
   }
 
   deposit(amount: number): void {
-    const depositAmount = new Money(amount);
+    const depositAmount = Money.of(amount);
     this.balance = this.balance.add(depositAmount);
     this.apply(
       new AccountDepositedEvent({
@@ -75,7 +75,10 @@ export class AccountImplement extends AggregateRoot implements Account {
   }
 
   withdraw(amount: number): void {
-    const withdrawAmount = new Money(amount);
+    const withdrawAmount = Money.of(amount);
+    if (this.balance.toNumber() < withdrawAmount.toNumber()) {
+      throw new Error('잔액이 부족합니다');
+    }
     this.balance = this.balance.subtract(withdrawAmount);
     this.apply(
       new AccountWithdrawEvent({

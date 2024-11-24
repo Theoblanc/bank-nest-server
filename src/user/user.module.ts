@@ -14,12 +14,12 @@ export const UserRepositoryImpl: Provider = {
   useClass: UserTypeORM
 };
 
-const resolver = [UserResolver];
-const handler = [RegisterUserHandler, GetMeHandler];
+const resolvers = [UserResolver];
+const handles = [RegisterUserHandler, GetMeHandler];
 
 @Module({
   imports: [CqrsModule, TypeOrmModule.forFeature([UserEntity])],
-  providers: [...resolver, ...handler, UserRepositoryImpl, UserFactory],
+  providers: [...resolvers, ...handles, UserRepositoryImpl, UserFactory],
   exports: [UserRepositoryImpl]
 })
 export class UserModule {}

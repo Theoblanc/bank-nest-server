@@ -4,7 +4,6 @@ export interface ITransferRequestedCommand {
   fromAccountId: string;
   toAccountId: string;
   amount: number;
-  description?: string;
 }
 
 export class TransferRequestedCommand implements ICommand {

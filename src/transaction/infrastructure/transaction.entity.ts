@@ -8,6 +8,12 @@ export enum TransactionType {
   TRANSFER = 'TRANSFER'
 }
 
+export enum TransactionStatus {
+  REQUESTED = 'REQUESTED', // 거래 요청됨
+  COMPLETED = 'COMPLETED', // 거래 완료
+  FAILED = 'FAILED' // 거래 실패
+}
+
 @Entity({ name: 'transactions' })
 export class TransactionEntity extends BaseEntity {
   @Column('decimal', { precision: 10, scale: 2 })
@@ -18,6 +24,12 @@ export class TransactionEntity extends BaseEntity {
     enum: TransactionType
   })
   transactionType: TransactionType;
+
+  @Column({
+    type: 'enum',
+    enum: TransactionStatus
+  })
+  transactionStatus: TransactionStatus;
 
   @ManyToOne(() => AccountEntity, (account) => account.transactionsFrom)
   @JoinColumn({ name: 'from_account_id' })

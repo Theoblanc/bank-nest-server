@@ -5,6 +5,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { RepositoryToken } from '@common/infrastructure/repository-token';
 import { RegisterUserCommand } from '@/user/application/command/register-user.command';
 import { UserRole } from '@/user/domain/user.model';
+import { MockFactory } from '../../../../test/mocks/mock-factory';
 
 describe('registerUserHandler', () => {
   let handler: RegisterUserHandler;
@@ -21,15 +22,12 @@ describe('registerUserHandler', () => {
             save: jest.fn(),
             findOne: jest.fn(),
             findByEmail: jest.fn(),
-            newId: jest.fn().mockReturnValue('new-user-id') // newId 메서드 모킹 및 반환값 설정
+            newId: jest.fn().mockReturnValue('new-user-id')
           }
         },
         {
           provide: UserFactory,
-          useValue: {
-            create: jest.fn(),
-            reconstitute: jest.fn()
-          }
+          useValue: MockFactory
         }
       ]
     }).compile();

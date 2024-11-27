@@ -4,7 +4,7 @@ import {
   TransactionType
 } from '@/transaction/infrastructure/transaction.entity';
 import { TransactionProperties } from '@/transaction/domain/transaction.model';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
 registerEnumType(TransactionType, {
   name: 'TransactionType',
@@ -31,17 +31,22 @@ export class TransactionDto implements TransactionProperties {
   transactionType: TransactionType;
 
   @Field()
-  fromAccountId?: string;
+  @IsNotEmpty()
+  fromAccountId: string;
 
   @Field()
-  toAccountId?: string;
+  @IsNotEmpty()
+  toAccountId: string;
 
   @Field()
+  @IsNotEmpty()
   amount: number;
 
   @Field({ nullable: true })
+  @IsOptional()
   description?: string;
 
   @Field()
+  @IsNotEmpty()
   createdAt: Date;
 }

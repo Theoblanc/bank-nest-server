@@ -4,7 +4,8 @@ import { Transform } from 'class-transformer';
 import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 
 registerEnumType(UserRole, {
-  name: 'RoleEnum'
+  name: 'UserRole',
+  description: '유저 권한'
 });
 
 @InputType()

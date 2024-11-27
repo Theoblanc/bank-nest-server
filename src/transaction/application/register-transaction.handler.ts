@@ -5,6 +5,7 @@ import { ITransactionRepository } from '@/transaction/domain/transaction.reposit
 import { RepositoryToken } from '@common/infrastructure/repository-token';
 import { TransactionFactory } from '@/transaction/domain/transaction.factory';
 import { Transaction } from '@/transaction/domain/transaction.model';
+import { TransactionStatus } from '@/transaction/infrastructure/transaction.entity';
 
 @CommandHandler(RegisterTransactionCommand)
 export class RegisterTransactionHandler {
@@ -19,6 +20,7 @@ export class RegisterTransactionHandler {
 
     const transaction: Transaction = this.factory.create({
       id: this.transactionRepository.newId(),
+      status: TransactionStatus.REQUESTED,
       ...command.payload
     });
 

@@ -1,5 +1,9 @@
 import { IUserRepository } from '@/user/domain/user.repository';
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger
+} from '@nestjs/common';
 import UserEntity from '@/user/infrastructure/user.entity';
 import { FindOneOptions, Repository } from 'typeorm';
 import { UserFactory } from '@/user/domain/user.factory';
@@ -22,14 +26,15 @@ export class UserTypeORM
     this.logger = new Logger(this.constructor.name);
   }
 
-  async save(model: User): Promise<null> {
+  async save(model: User): Promise<User> {
     try {
       const entity = this.modelToEntity(model);
       const result = await this.userRepo.save(entity);
       this.logger.log(`Saved with the following id: ${result.id}`);
-      return null;
+      return this.entityToModel(result);
     } catch (error) {
       this.logger.error(error);
+      throw new InternalServerErrorException();
     }
   }
   async findByEmail(email: string): Promise<User | null> {

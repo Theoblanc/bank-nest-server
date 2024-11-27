@@ -20,10 +20,10 @@ export type TransactionEssentialProperties = Required<{
   id: string;
   transactionType: TransactionType;
   amount: number;
+  status: TransactionStatus;
 }>;
 
 export type TransactionOptionalProperties = Partial<{
-  status?: TransactionStatus;
   fromAccountId?: string;
   toAccountId?: string;
   toAccount?: AccountProperties;
@@ -41,7 +41,7 @@ export type TransactionProperties = BaseModel &
 export class TransactionImplement extends AggregateRoot implements Transaction {
   private readonly id: string;
   private readonly transactionType: TransactionType;
-  private readonly status: TransactionStatus = TransactionStatus.REQUESTED;
+  private readonly status: TransactionStatus;
   private readonly fromAccount?: AccountProperties;
   private readonly fromAccountId?: string;
   private readonly toAccount?: AccountProperties;

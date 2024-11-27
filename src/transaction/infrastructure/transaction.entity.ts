@@ -29,7 +29,7 @@ export class TransactionEntity extends BaseEntity {
     type: 'enum',
     enum: TransactionStatus
   })
-  transactionStatus: TransactionStatus;
+  status: TransactionStatus;
 
   @ManyToOne(() => AccountEntity, (account) => account.transactionsFrom)
   @JoinColumn({ name: 'from_account_id' })
@@ -37,7 +37,7 @@ export class TransactionEntity extends BaseEntity {
 
   @Column('uuid', { name: 'from_account_id' })
   @Index()
-  fromAccountId: string;
+  fromAccountId?: string;
 
   @ManyToOne(() => AccountEntity, (account) => account.transactionsTo)
   @JoinColumn({ name: 'to_account_id' })
@@ -45,7 +45,7 @@ export class TransactionEntity extends BaseEntity {
 
   @Column('uuid', { name: 'to_account_id' })
   @Index()
-  toAccountId: string;
+  toAccountId?: string;
 
   @Column('varchar', { length: 255, nullable: true })
   description?: string | null;

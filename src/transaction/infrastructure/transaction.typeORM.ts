@@ -1,4 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger
+} from '@nestjs/common';
 
 import { BaseTypeORM } from '@common/infrastructure/base.typeORM';
 import { ITransactionRepository } from '@/transaction/domain/transaction.repository';
@@ -21,5 +25,16 @@ export class TransactionTypeORM
   ) {
     super(factory);
     this.logger = new Logger(this.constructor.name);
+  }
+
+  async save(model: Transaction): Promise<Transaction> {
+    try {
+      const entity = this.modelToEntity(model);
+      const result = await this.transactionRepository.save(entity);
+      return this.entityToModel(result);
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException();
+    }
   }
 }

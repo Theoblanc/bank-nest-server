@@ -20,7 +20,7 @@ export class TransferRequestedCommandHandler
   }
 
   async execute(command: TransferRequestedCommand): Promise<void> {
-    const { fromAccountId, toAccountId, amount, description } = command.payload;
+    const { fromAccountId, toAccountId, amount } = command.payload;
 
     this.logger.log(
       `Processing transfer: ${fromAccountId} -> ${toAccountId}, Amount: ${amount}`

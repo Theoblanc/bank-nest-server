@@ -29,6 +29,6 @@ export class GetMeHandler implements IQueryHandler<GetMeQuery> {
 
     // 3. 조회된 데이터를 Redis에 캐시로 저장
 
-    return foundUser;
+    return foundUser.properties();
   }
 }

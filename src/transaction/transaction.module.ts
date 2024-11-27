@@ -5,6 +5,8 @@ import { RepositoryToken } from '@common/infrastructure/repository-token';
 import { TransactionTypeORM } from '@/transaction/infrastructure/transaction.typeORM';
 import { TransactionResolver } from '@/transaction/interfaces/transaction.resolver';
 import { RegisterTransactionHandler } from '@/transaction/application/register-transaction.handler';
+import { TransactionFactory } from '@/transaction/domain/transaction.factory';
+import { CqrsModule } from '@nestjs/cqrs';
 
 export const TransactionRepositoryImpl: Provider = {
   provide: RepositoryToken.TRANSACTION,
@@ -14,8 +16,13 @@ export const TransactionRepositoryImpl: Provider = {
 const handles = [RegisterTransactionHandler];
 const resolvers = [TransactionResolver];
 @Module({
-  imports: [TypeOrmModule.forFeature([TransactionEntity])],
-  providers: [TransactionRepositoryImpl, ...handles, ...resolvers],
+  imports: [CqrsModule, TypeOrmModule.forFeature([TransactionEntity])],
+  providers: [
+    TransactionRepositoryImpl,
+    ...handles,
+    ...resolvers,
+    TransactionFactory
+  ],
   exports: [TransactionRepositoryImpl]
 })
 export class TransactionModule {}

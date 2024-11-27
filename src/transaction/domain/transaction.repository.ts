@@ -4,5 +4,5 @@ import { Transaction } from '@/transaction/domain/transaction.model';
 
 export interface ITransactionRepository
   extends IBaseRepository<TransactionEntity, Transaction> {
-  save(transaction: Transaction): Promise<null>;
+  save(transaction: Transaction): Promise<Transaction>;
 }

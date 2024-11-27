@@ -1,5 +1,6 @@
-import { Field, InputType } from '@nestjs/graphql';
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
 import { TransactionType } from '@/transaction/infrastructure/transaction.entity';
+import { AccountType } from '@/account/domain/account.model';
 
 @InputType()
 export class RegisterTransactionInput {

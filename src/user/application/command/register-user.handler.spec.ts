@@ -9,8 +9,8 @@ import { MockFactory } from '../../../../test/mocks/mock-factory';
 
 describe('registerUserHandler', () => {
   let handler: RegisterUserHandler;
-  let userRepository: IUserRepository;
-  let factory: UserFactory;
+  let userRepository: jest.Mocked<IUserRepository>;
+  let factory: jest.Mocked<UserFactory>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,8 +33,10 @@ describe('registerUserHandler', () => {
     }).compile();
 
     handler = module.get<RegisterUserHandler>(RegisterUserHandler);
-    userRepository = module.get<IUserRepository>(RepositoryToken.USER);
-    factory = module.get<UserFactory>(UserFactory);
+    userRepository = module.get<jest.Mocked<IUserRepository>>(
+      RepositoryToken.USER
+    );
+    factory = module.get<jest.Mocked<UserFactory>>(UserFactory);
   });
 
   it('should successfully register a new user', async () => {
@@ -45,12 +47,19 @@ describe('registerUserHandler', () => {
       role: UserRole.USER
     });
 
-    (userRepository.findByEmail as jest.Mock).mockResolvedValue(null);
+    userRepository.findByEmail.mockResolvedValue(null);
     const mockUser = {
       register: jest.fn(),
-      commit: jest.fn()
+      commit: jest.fn(),
+      properties: jest.fn().mockReturnValue({
+        id: 'user-1',
+        email: 'test@example.com',
+        password: 'password123',
+        name: 'Test User',
+        role: UserRole.USER
+      })
     };
-    (factory.create as jest.Mock).mockReturnValue(mockUser);
+    factory.create.mockReturnValue(mockUser);
 
     await handler.execute(command);
 

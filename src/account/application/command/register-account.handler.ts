@@ -1,13 +1,13 @@
 import { CommandHandler } from '@nestjs/cqrs';
 import { RegisterAccountCommand } from '@/account/application/command/register-account.command';
-import { Inject, Logger } from '@nestjs/common';
+import { Inject, Logger, NotFoundException } from '@nestjs/common';
 import { RepositoryToken } from '@common/infrastructure/repository-token';
 import { AccountFactory } from '@/account/domain/account.factory';
 import { IAccountRepository } from '@/account/domain/account.repository';
 import { IUserRepository } from '@/user/domain/user.repository';
 
 @CommandHandler(RegisterAccountCommand)
-export class RegisterAccountCommandHandler {
+export class RegisterAccountHandler {
   private readonly logger: Logger;
   constructor(
     @Inject(RepositoryToken.ACCOUNT)
@@ -25,6 +25,12 @@ export class RegisterAccountCommandHandler {
     const user = await this.userRepository.findOne({
       where: { id: command.payload.userId }
     });
+
+    if (!user) {
+      throw new NotFoundException(
+        `User not found with id ${command.payload.userId}`
+      );
+    }
 
     const userProperties = user.properties();
 

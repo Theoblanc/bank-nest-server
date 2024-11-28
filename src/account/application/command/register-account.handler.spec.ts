@@ -9,7 +9,7 @@ import { RegisterAccountCommand } from '@/account/application/command/register-a
 import { IUserRepository } from '@/user/domain/user.repository';
 import { NotFoundException } from '@nestjs/common';
 
-describe('registerAccountHandler', () => {
+describe('Register Account Command Handler', () => {
   let handler: RegisterAccountHandler;
   let accountRepository: jest.Mocked<IAccountRepository>;
   let userRepository: jest.Mocked<IUserRepository>;

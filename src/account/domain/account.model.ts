@@ -4,6 +4,7 @@ import { AggregateRoot } from '@nestjs/cqrs';
 import { Money } from '@common/domain/value-objects/money.vo';
 import { AccountDepositedEvent } from '@/account/domain/events/account-deposited.event';
 import { AccountWithdrawEvent } from '@/account/domain/events/account-withdarw.event';
+import { BadRequestException } from '@nestjs/common';
 
 export enum AccountType {
   BUSINESS = 'BUSINESS',
@@ -77,7 +78,7 @@ export class AccountImplement extends AggregateRoot implements Account {
   withdraw(amount: number): void {
     const withdrawAmount = Money.of(amount);
     if (this.balance.toNumber() < withdrawAmount.toNumber()) {
-      throw new Error('잔액이 부족합니다');
+      throw new BadRequestException('잔액이 부족합니다');
     }
     this.balance = this.balance.subtract(withdrawAmount);
     this.apply(

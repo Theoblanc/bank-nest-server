@@ -1,5 +1,5 @@
 import { CommandHandler } from '@nestjs/cqrs';
-import { Inject, Logger } from '@nestjs/common';
+import { BadRequestException, Inject, Logger } from '@nestjs/common';
 import { RepositoryToken } from '@common/infrastructure/repository-token';
 import { IAccountRepository } from '@/account/domain/account.repository';
 import { AccountFactory } from '@/account/domain/account.factory';
@@ -27,7 +27,7 @@ export class WithdrawAccountCommandHandler {
       this.logger.error(
         `Account with ID ${command.payload.accountId} not found.`
       );
-      throw new Error(`Account not found.`);
+      throw new BadRequestException(`Account not found.`);
     }
 
     const accountProperties = account.properties();

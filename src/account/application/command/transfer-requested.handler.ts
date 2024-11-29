@@ -1,16 +1,15 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { TransferRequestedCommand } from './transfer-requested.command';
 import {
   BadRequestException,
   Inject,
   InternalServerErrorException,
   Logger
 } from '@nestjs/common';
-import { RepositoryToken } from '@common/infrastructure/repository-token';
-import { IAccountRepository } from '@/account/domain/account.repository';
+import { TransferRequestedCommand } from '@/account/application/command/transfer-requested.command';
+import { DataSource } from 'typeorm';
 import { AccountFactory } from '@/account/domain/account.factory';
-import { InjectEntityManager } from '@nestjs/typeorm';
-import { EntityManager } from 'typeorm';
+import { IAccountRepository } from '@/account/domain/account.repository';
+import { RepositoryToken } from '@common/infrastructure/repository-token';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 @CommandHandler(TransferRequestedCommand)
 export class TransferRequestedCommandHandler
@@ -22,8 +21,7 @@ export class TransferRequestedCommandHandler
     @Inject(RepositoryToken.ACCOUNT)
     private readonly accountRepository: IAccountRepository,
     private readonly factory: AccountFactory,
-    @InjectEntityManager()
-    private readonly entityManager: EntityManager
+    private readonly dataSource: DataSource
   ) {
     this.logger = new Logger(TransferRequestedCommandHandler.name);
   }
@@ -39,9 +37,8 @@ export class TransferRequestedCommandHandler
       `Starting transfer: ${fromAccountId} -> ${toAccountId}, Amount: ${amount}`
     );
 
-    await this.entityManager.transaction(async (transactionalEntityManager) => {
-      try {
-        // 1. 송신 계좌 조회 (with lock)
+    await this.dataSource
+      .transaction(async (transactionalEntityManager) => {
         const fromAccount = await this.accountRepository.findOneAndLock(
           transactionalEntityManager,
           { where: { id: fromAccountId } }
@@ -53,7 +50,6 @@ export class TransferRequestedCommandHandler
           );
         }
 
-        // 2. 수신 계좌 조회 (with lock)
         const toAccount = await this.accountRepository.findOneAndLock(
           transactionalEntityManager,
           { where: { id: toAccountId } }
@@ -65,19 +61,15 @@ export class TransferRequestedCommandHandler
           );
         }
 
-        // 3. 도메인 모델로 변환
         const senderAccount = this.factory.create(fromAccount.properties());
         const receiverAccount = this.factory.create(toAccount.properties());
 
-        // 4. 송금 처리
         senderAccount.withdraw(amount);
         receiverAccount.deposit(amount);
 
-        // 5. 이벤트 커밋
         senderAccount.commit();
         receiverAccount.commit();
 
-        // 6. 상태 저장
         await this.accountRepository.save(
           senderAccount,
           transactionalEntityManager
@@ -90,7 +82,8 @@ export class TransferRequestedCommandHandler
         this.logger.log(
           `Transfer completed: ${fromAccountId} -> ${toAccountId}, Amount: ${amount}`
         );
-      } catch (error) {
+      })
+      .catch((error) => {
         this.logger.error(
           `Transfer failed: ${fromAccountId} -> ${toAccountId}, Amount: ${amount}`,
           error.stack
@@ -103,7 +96,6 @@ export class TransferRequestedCommandHandler
         throw new InternalServerErrorException(
           'An error occurred while processing the transfer'
         );
-      }
-    });
+      });
   }
 }

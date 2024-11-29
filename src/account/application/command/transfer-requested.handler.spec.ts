@@ -11,7 +11,7 @@ import {
 import { AccountType, Account } from '@/account/domain/account.model';
 import { TransferRequestedCommandHandler } from '@/account/application/command/transfer-requested.handler';
 
-describe('TransferRequestedCommandHandler', () => {
+describe('Transfer Requested Command Handler', () => {
   let commandHandler: TransferRequestedCommandHandler;
   let accountRepository: jest.Mocked<IAccountRepository>;
   let factory: jest.Mocked<AccountFactory>;

@@ -61,7 +61,14 @@ describe('Register Account Command Handler', () => {
 
     const mockAccount = {
       commit: jest.fn(),
-      properties: jest.fn(),
+      properties: jest.fn().mockReturnValue({
+        id: 'account-id-1',
+        type: AccountType.PERSONAL,
+        ownerName: 'John Doe',
+        accountNumber: '12345678911234',
+        user: mockUser.properties(),
+        balance: 1000
+      }),
       getBalance: jest.fn(),
       deposit: jest.fn(),
       withdraw: jest.fn()
@@ -90,7 +97,7 @@ describe('Register Account Command Handler', () => {
       user: mockUser.properties(),
       balance: 1000
     });
-    expect(accountRepository.save).toHaveBeenCalledWith(mockAccount);
+    expect(accountRepository.save).toHaveBeenCalledWith(mockAccount, null);
     expect(mockAccount.commit).toHaveBeenCalled();
   });
 

@@ -4,7 +4,7 @@ import { Account } from '@/account/domain/account.model';
 import { AccountFactory } from '@/account/domain/account.factory';
 import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindOneOptions, Repository } from 'typeorm';
+import { EntityManager, FindOneOptions, Repository } from 'typeorm';
 import { IAccountRepository } from '@/account/domain/account.repository';
 
 export class AccountTypeORM
@@ -35,15 +35,21 @@ export class AccountTypeORM
     }
   }
 
-  async save(model: Account): Promise<null> {
+  async save(
+    model: Account,
+    transactionalEntityManager: EntityManager | null = null
+  ): Promise<null> {
     try {
       const entity = this.modelToEntity(model);
-      const result = await this.accountRepo.save(entity);
+      const repository = transactionalEntityManager
+        ? transactionalEntityManager.getRepository(AccountEntity)
+        : this.accountRepo;
+
+      const result = await repository.save(entity);
       this.logger.log(`Saved with the following id: ${result.id}`);
       return null;
     } catch (error) {
       this.logger.error(`Failed to save account: ${error}`);
-
       throw new InternalServerErrorException(
         `Failed to save account: ${error}`
       );
@@ -53,6 +59,31 @@ export class AccountTypeORM
   async findOne(options: FindOneOptions): Promise<Account> {
     const account = await this.accountRepo.findOne(options);
     return this.entityToModel(account);
+  }
+
+  async findOneAndLock(
+    transactionalEntityManager: EntityManager,
+    options: FindOneOptions<AccountEntity>
+  ): Promise<Account> {
+    try {
+      const repository =
+        transactionalEntityManager.getRepository(AccountEntity);
+      const account = await repository.findOne({
+        ...options,
+        lock: { mode: 'pessimistic_write' }
+      });
+
+      if (!account) {
+        return null;
+      }
+
+      return this.entityToModel(account);
+    } catch (error) {
+      this.logger.error(`Failed to find and lock account: ${error}`);
+      throw new InternalServerErrorException(
+        `Failed to find and lock account: ${error}`
+      );
+    }
   }
 
   async update(id: string, updatedAccount: Account): Promise<Account> {
